@@ -1,53 +1,43 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Button, ScrollView, FlatList } from 'react-native';
 
+import GoalItem from './Components/GoalItem';
+import GoalInput from './Components/GoalInput';
+
 export default function App() {
-  const [text, setText] = useState('');
   const [courseText, setCourseText] = useState([]);
 
-  function inputHandler(enterText) {
-    setText(enterText);
-  }
+  const addHandler = goalTitle => {
+    setCourseText(currentText => [
+      ...currentText,
+      {
+        id: Math.random().toString(),
+        value: goalTitle
+      }])
+  };
 
-  const addHandler = () => {
-    // console.log("text ", text);
-    setCourseText(currentText => [...currentText,
-    {
-      id: Math.random().toString(),
-      value: text
-    }])
+  const removeHandler = goalId => {
+    setCourseText(currentText => {
+      return currentText.filter(goal => goal.id !== goalId);
+    })
   }
 
   return (
     <View style={styles.screen}>
-      <View style={styles.inputContainer}>
-        <TextInput
-          placeholder="Course Goal"
-          style={styles.input}
-          onChangeText={inputHandler}
-          value={text}
-        />
-        <Button title="ADD" onPress={addHandler} />
-      </View>
-
-      {/* <ScrollView>
-        {courseText.map(item => {
-          return (
-            <View key={item} style={styles.listItem}>
-              <Text>{item}</Text>
-            </View>
-          )
-        })}
-      </ScrollView> */}
+      <GoalInput
+        addHandler={addHandler}
+      />
 
       <FlatList
         keyExtractor={(item, index) => item.id}
         data={courseText}
         renderItem={itemData => {
           return (
-            <View style={styles.listItem}>
-              <Text>{itemData.item.value}</Text>
-            </View>
+            <GoalItem
+              id={itemData.item.id}
+              onDelete={removeHandler}
+              title={itemData.item.value}
+            />
           )
         }}
       />
@@ -91,23 +81,5 @@ export default function App() {
 const styles = StyleSheet.create({
   screen: {
     padding: 50,
-  },
-  inputContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-  input: {
-    width: '80%',
-    borderColor: 'black',
-    borderWidth: 1,
-    padding: 10
-  },
-  listItem: {
-    padding: 10,
-    marginVertical: 10,
-    backgroundColor: '#ccc',
-    borderColor: 'black',
-    borderWidth: 1
   }
 });
