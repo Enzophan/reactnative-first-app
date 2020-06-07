@@ -6,26 +6,42 @@ import GoalInput from './Components/GoalInput';
 
 export default function App() {
   const [courseText, setCourseText] = useState([]);
+  const [isAddModal, setIsAddModal] = useState(false);
 
   const addHandler = goalTitle => {
+    if (goalTitle.length === 0) {
+      return
+    };
+
     setCourseText(currentText => [
       ...currentText,
       {
         id: Math.random().toString(),
         value: goalTitle
-      }])
+      }]);
+    setIsAddModal(false);
   };
 
   const removeHandler = goalId => {
     setCourseText(currentText => {
       return currentText.filter(goal => goal.id !== goalId);
     })
-  }
+  };
+
+  const cancelAddModal = () => {
+    setIsAddModal(false);
+  };
 
   return (
     <View style={styles.screen}>
+      <Button
+        title='Add New Goal'
+        onPress={() => setIsAddModal(true)}
+      />
       <GoalInput
+        visible={isAddModal}
         addHandler={addHandler}
+        onCancel={cancelAddModal}
       />
 
       <FlatList
