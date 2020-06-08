@@ -4,3 +4,7 @@ $ https://expo.io/learn
 - npm run android
 - npm run ios # requires an iOS device or macOS for access to an iOS simulator
 - npm run web# reactnative-first-app
+
+
+# Debug tool
+$ https://github.com/jhen0409/react-native-debugger/releases
